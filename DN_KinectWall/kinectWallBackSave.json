@@ -1,0 +1,30 @@
+{
+	"pattrstorage" : 	{
+		"name" : "kinectWallBackSave",
+		"slots" : 		{
+			"1" : 			{
+				"id" : 1,
+				"data" : 				{
+					"flonum[1]" : [ 0.0 ],
+					"flonum[2]" : [ 0.343 ],
+					"flonum[3]" : [ 3.786 ],
+					"flonum[4]" : [ 1.0 ],
+					"flonum[5]" : [ 0.36 ],
+					"flonum[6]" : [ 2.772 ],
+					"number" : [ 2 ],
+					"number[1]" : [ 50 ],
+					"number[2]" : [ 115 ],
+					"number[3]" : [ 93 ],
+					"number[5]" : [ 7 ],
+					"textedit" : [ "192.168.1.101" ],
+					"toggle" : [ 1 ],
+					"toggle[1]" : [ 1 ]
+				}
+
+			}
+
+		}
+
+	}
+
+}

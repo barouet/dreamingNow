@@ -1,0 +1,29 @@
+{
+	"pattrstorage" : 	{
+		"name" : "kinectWallFrontSave",
+		"slots" : 		{
+			"1" : 			{
+				"id" : 1,
+				"data" : 				{
+					"flonum[1]" : [ 0.05 ],
+					"flonum[2]" : [ 0.343 ],
+					"flonum[3]" : [ 2.977 ],
+					"flonum[4]" : [ 0.957 ],
+					"flonum[5]" : [ 0.13 ],
+					"flonum[6]" : [ 2.961 ],
+					"number" : [ 1 ],
+					"number[1]" : [ 50 ],
+					"number[2]" : [ 127 ],
+					"number[3]" : [ 108 ],
+					"number[5]" : [ 2 ],
+					"textedit" : [ "192.168.1.101" ],
+					"toggle" : [ 0 ]
+				}
+
+			}
+
+		}
+
+	}
+
+}

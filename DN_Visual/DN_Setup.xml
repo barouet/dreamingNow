@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<dreamingNowSetup>
+	<listeningPort>8002</listeningPort>
+	<soundComputerIP>127.0.0.1</soundComputerIP>
+	<soundComputerPort>7000</soundComputerPort>
+	<cueInterfaceIP>127.0.0.1</cueInterfaceIP>
+	<cueInterfacePort>7010</cueInterfacePort>
+	<outputScreenPositionX>1440</outputScreenPositionX>
+	<outputScreenPositionY>250</outputScreenPositionY>
+</dreamingNowSetup>
+

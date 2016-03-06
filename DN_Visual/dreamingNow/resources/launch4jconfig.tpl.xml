@@ -1,0 +1,45 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>JARPATH</jar>
+  <outfile>EXEPATH</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>high</priority>
+  <downloadUrl>http://www.oracle.com/technetwork/java/javase/downloads/jre6-downloads-1637595.html</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>true</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>./icon.ico</icon>
+  <singleInstance>
+    <mutexName>com.JARPATH</mutexName>
+    <windowTitle>PROJECT_NAME</windowTitle>
+  </singleInstance>
+  <classPath>
+    <mainClass>MAINCLASS</mainClass>
+    <cp>LIBRAIRES</cp>
+  </classPath>
+  <jre>
+    <path>bundled JRE path</path>
+    <minVersion>JVM_VERSION_MIN</minVersion>
+    <maxVersion>JVM_VERSION_MAX</maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <initialHeapSize>JVM_XMS</initialHeapSize>
+    <maxHeapSize>JVM_XMX</maxHeapSize>
+    <opt>-Djava.ext.dirs=lib -Djava.library.path=lib</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>PROJECT_FULLVERSION</fileVersion>
+    <txtFileVersion>PROJECT_VERSION</txtFileVersion>
+    <productVersion>PROJECT_FULLVERSION</productVersion>
+    <txtProductVersion>PROJECT_VERSION</txtProductVersion>
+    <fileDescription>PROJECT_NAME</fileDescription>
+    <copyright>PROJECT_AUTHOR</copyright>
+    <productName>PROJECT_NAME</productName>
+    <companyName>PROJECT_AUTHOR</companyName>
+    <internalName>EXENAME</internalName>
+    <originalFilename>EXENAME.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

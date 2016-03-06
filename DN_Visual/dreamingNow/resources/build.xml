@@ -1,0 +1,391 @@
+<?xml version="1.0"?>
+<!--
+	topic:		PROCESSING 2.0 EXPORT FROM ECLIPSE
+	date:		16-10-2013 / 16-10-2008
+	author:		jeanmaximecouillard@gmail.com / ste.fielder[near]gmail.com
+-->
+<project name="MyProject" default="1. deploy multi-plateform JAR" basedir="../">
+
+	<!-- Per-project properties -->
+	<property file="resources/build.properties" />
+
+	<!-- Project related folders -->
+	<property name="dir.src" value="src" />
+	<property name="dir.data" value="data" />
+	<property name="dir.release" value="release" />
+	<property name="dir.lib" value="./libs" />
+	<property name="dir.libNat" value="./libs" />
+
+	<!-- ANT procedure folders -->
+	<property name="dir.tmp" value="tmp" />
+	<property name="dir.build" value="${dir.tmp}/build" />
+	<property name="dir.class" value="${dir.tmp}/class" />
+	
+	<!-- launch4j plugin location -->
+	<property name="launch4j.dir" location="${lauch4j.path}" />
+
+	<!-- CLEAN WORKSPACE -->
+	<target name="clean">
+		<delete dir="${project.name}.app" />
+		<delete dir="${dir.build}" />
+		<delete dir="${dir.class}" />
+		<delete dir="${dir.doc}" />
+		<delete dir="${dir.libs}" />
+		<delete dir="${dir.tmp}/java" />
+	</target>
+	
+	<!-- REMOVES BUILD -->
+	<target name="clean build">
+		<delete dir="${dir.build}" />
+	</target>
+
+	<!-- REMOVES DEPLOYED -->
+	<target name="clean deploy">
+		<delete dir="${dir.release}" />
+	</target>
+
+	<!-- COMPILES PROJECT CLASSES -->
+	<target name="compile" depends="clean">
+		<fail unless="dir.class" message="ERROR: Class dir not defined." />
+		<fail unless="dir.lib" message="ERROR: Library dir not defined." />
+		<fail unless="dir.libNat" message="ERROR: Library dir for native archives not defined." />
+		<fail unless="dir.src" message="ERROR: Source dir not defined." />
+		<fail unless="main.class" message="ERROR: Project main class is not defined." />
+
+		<!-- Check for render mode, openGL or not -->
+		<loadfile property="main" srcfile="${dir.src}/${main.package.path}${main.class}.java" />
+		<condition property="is.OPENGL">
+			<contains string="${main}" substring="processing.opengl" casesensitive="true" />
+		</condition>
+		<!-- Check for OS X -->
+		<condition property="is.OSX">
+			<os family="mac" name="Mac OS X" />
+		</condition>
+
+		<!-- Create folder for compiled .class documents -->
+		<mkdir dir="${dir.class}" />
+
+		<!-- Create folder for source code -->
+		<mkdir dir="${dir.tmp}/java" />
+
+		<!-- Coppy main soruce -->
+		<copy todir="${dir.tmp}/java" verbose="true">
+			<fileset dir="${dir.src}">
+				<include name="**/*.java" />
+			</fileset>
+		</copy>
+
+		<!-- Copy required projects -->
+		<copy todir="${dir.tmp}/java">
+			<fileset dir="../" includes="${dir.requiredProjects}" />
+		</copy>
+
+		<!-- Build -->
+		<javac srcdir="${dir.tmp}/java" nowarn="true" destdir="${dir.class}" debug="true"  deprecation="false" optimize="true" includeantruntime="false" encoding="UTF-8">
+			<classpath>
+				<fileset dir="${dir.lib}" includes="**/*.jar" />
+				<fileset dir="${dir.libNat}" includes="**/*.jar" />
+			</classpath>
+		</javac>
+
+	</target>
+
+
+	<!-- EXPORT JAR RUNNABLE -->
+	<target name="jar" depends="clean build, compile">
+
+		<!-- Conditions -->
+		<fail unless="main.class" message="ERROR: ANT Project name not defined. Must be the name of your project man class." />
+		<fail unless="project.name" message="ERROR: Project name not defined. Needed for setting  application name." />
+
+		<!-- Create build dir -->
+		<mkdir dir="${dir.build}" />
+
+		<!-- Copy libs files -->
+		<copy todir="${dir.build}/lib" flatten="true">
+			<fileset dir="${dir.lib}" includes="**/*.jar " />
+			<fileset dir="${dir.libNat}" includes="**/*.jnilib" />
+		</copy>
+
+		<!-- Create .JAR classpath -->
+		<pathconvert property="class.pathJar" pathsep=" ./lib/">
+			<fileset dir="${dir.build}" includes="**/*.jar" />
+			<flattenmapper />
+		</pathconvert>
+
+		<!-- Create JAR -->
+		<jar jarfile="${dir.build}/lib/${main.class}.jar">
+			<fileset dir="${dir.class}" />
+			<manifest>
+				<attribute name="Main-Class" value="${main.package.name}${main.class}" />
+				<attribute name="Class-Path" value=". ./lib/${class.pathJar}" />
+				<attribute name="Build-By" value="${project.author}" />
+				<attribute name="Specification-Title" value="${main.class}" />
+				<attribute name="Specification-Version" value="${project.version}" />
+			</manifest>
+		</jar>
+		
+	</target>
+
+	<!-- Copy NATIVE LIBS TO BUILD -->
+	<target name="osx native libs">
+
+		<!--  Copy native libs archives to APP -->
+		<copy todir="${dir.build}/lib/macosx32" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/macosx32/*.dylib" />
+		</copy>
+		<copy todir="${dir.build}/lib/macosx32/plugins" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/macosx32/plugins/*.so" />
+		</copy>
+		<copy todir="${dir.build}/lib/macosx64" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/macosx64/*.dylib" />
+		</copy>
+		<copy todir="${dir.build}/lib/macosx64/plugins" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/macosx64/plugins/*.so" />
+		</copy>
+		<copy todir="${dir.build}/lib/macosx" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/macosx/*.*" />
+		</copy>
+		
+	</target>
+	
+	
+	<target name="win native libs">
+
+		<!--  Copy native libs archives to APP -->
+		<copy todir="${dir.build}/lib/windows32" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/windows32/*dll" />
+		</copy>
+		<copy todir="${dir.build}/lib/windows64" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/windows64/*dll" />
+		</copy>
+		<copy todir="${dir.build}/lib/windows32/plugins" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/windows32/plugins/*.dll" />
+		</copy>
+		<copy todir="${dir.build}/lib/windows64/plugins" flatten="true">
+			<fileset dir="${dir.libNat}" includes="**/windows64/plugins/*.dll" />
+		</copy>
+	
+	</target>
+	
+
+	<target name="1. deploy multi-plateform JAR" depends="jar, osx native libs, win native libs">
+
+			
+		<!-- Copy JAR to release -->
+		<copy todir="${dir.release}/jar" flatten="false">
+			<fileset dir="${dir.build}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dir.release}/jar/data">
+			<fileset dir="${dir.data}" includes="**/*.*" />
+		</copy>
+
+		<mkdir dir="${dir.release}/jar/logs" />
+
+		<!-- Create SH launcher -->
+		<concat append="false" destfile="${dir.release}/jar/${main.class}-osx.sh">
+			<string>
+java -Djava.ext.dirs=lib -Djava.library.path=lib -Xms${jvm.xms}m -Xmx${jvm.xmx}m -jar  lib/${main.class}.jar
+			</string>				
+		</concat>
+
+		<!-- Create BAT 32-bits launcher -->
+		<concat append="false" destfile="release/jar/${main.class}-win64.bat">
+			<string>java -Djava.ext.dirs=lib -Djava.library.path=lib;lib/windows64 -Xms${jvm.xms}m -Xmx${jvm.xmx}m -jar lib/${main.class}.jar</string>
+		</concat>
+
+		<!-- Create BAT 64-bits launcher -->
+		<concat append="false" destfile="release/jar/${main.class}-win32.bat">
+			<string>java -Djava.ext.dirs=lib -Djava.library.path=lib;lib/windows32 -Xms${jvm.xms}m -Xmx${jvm.xmx}m -jar lib/${main.class}.jar</string>
+		</concat>
+
+		<!-- Delete Temp -->
+		<delete dir="${dir.tmp}" />
+
+	</target>
+
+
+	<!-- EXPORT OSX APPLICATION -->
+	<target name="2. deploy OSX" depends="clean build, compile, osx native libs">
+
+		<!-- Remove existing application -->
+		<delete dir="${main.class}.app" />
+
+		<!-- Check requirements -->
+		<fail unless="is.OSX" message="Mac .app deploy works on Mac OS X only." />
+		<fail unless="main.class" message="ERROR: ANT Project name not defined. Must be the name of your project man class." />
+		<fail unless="project.name" message="ERROR: Project name not defined. Needed for setting  application name." />
+
+		<!-- Copy jar archives -->
+		<copy todir="${dir.build}" flatten="true">
+			<fileset dir="${dir.lib}" includes="**/*.jar " />
+			<fileset dir="${dir.libNat}" includes="**/*.jnilib" />
+		</copy>
+		
+		<!-- Create Main JAR -->
+		<jar jarfile="${dir.build}/${main.class}.jar">
+			<fileset dir="${dir.class}" />
+			<manifest>
+				<attribute name="Main-Class" value="${main.package.name}${main.class}" />
+				<attribute name="Build-By" value="${project.author}" />
+				<attribute name="Specification-Title" value="${main.class}" />
+				<attribute name="Specification-Version" value="${project.version}" />
+			</manifest>
+		</jar>
+
+		<!-- Create .app bundle folder structure -->
+		<mkdir dir="${dir.release}/osx/${project.name}.app" />
+		<mkdir dir="${dir.release}/osx/${project.name}.app/Contents" />
+		<mkdir dir="${dir.release}/osx/${project.name}.app/Contents/MacOS" />
+		<mkdir dir="${dir.release}/osx/${project.name}.app/Contents/Resources" />
+		<mkdir dir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java" />
+		<mkdir dir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java/data" />
+		<mkdir dir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java/plugins" />
+		<echo file="${dir.release}/osx/${project.name}.app/Contents/PkgInfo" message="APPL${project.author.appleId}" />
+		<!-- Copy exec JavaApplicationStub without turning it into a txt -->
+		<exec executable="cp">
+			<arg value="-rp" />
+			<arg value="resources/JavaApplicationStub" />
+			<arg value="${dir.release}/osx/${project.name}.app/Contents/MacOS" />
+		</exec>
+		
+		<exec executable="chmod">
+			<arg value="+x" />
+			<arg value="${dir.release}/osx/${project.name}.app/Contents/MacOS/JavaApplicationStub" />
+		</exec>
+
+		<!-- Create .APP classpath -->
+		<pathconvert property="class.pathApp" pathsep=":$JAVAROOT/">
+			<fileset dir="${dir.build}" includes="**/*.jar" />
+			<flattenmapper />
+		</pathconvert>		
+
+		<!-- Copy and setup Info.plist-->
+		<copy file="resources/Info.plist" todir="release/osx/${project.name}.app/Contents" />
+		<replace file="${dir.release}/osx/${project.name}.app/Contents/Info.plist">
+			<replacefilter token="APPLEDEV_ID" value="${project.author.appleId}" />
+			<replacefilter token="PROJECT_MAIN" value="${main.package.name}${main.class}" />
+			<replacefilter token="PROJECT_NAME" value="${project.name}" />
+			<replacefilter token="PROJECT_PACKAGE" value="${main.package.name}${main.class}" />
+			<replacefilter token="PROJECT_VERSION" value="${project.version}" />
+			<replacefilter token="CLASS_PATH" value="$JAVAROOT/${class.pathApp}" />
+			<replacefilter token="JVM_VERSION" value="${jvm.version}" />
+			<replacefilter token="JVM_XMS" value="${jvm.xms}" />
+			<replacefilter token="JVM_XMX" value="${jvm.xmx}" />
+			<replacefilter token="OSX_SAFEPOS" value="${osx.safeposition}" />
+		</replace>
+		
+		<!--  Copy native libs archives to APP -->
+		<!--  <copy todir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java/macosx" flatten="false">
+			<fileset dir="${dir.build}/lib/macosx" includes="**/*.jnilib" />
+		</copy> -->
+		<copy todir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java/macosx32" flatten="false">
+			<fileset dir="${dir.build}/lib/macosx32" includes="**/*.*" />
+		</copy>
+		<copy todir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java/macosx64" flatten="false">
+			<fileset dir="${dir.build}/lib/macosx64" includes="**/*.*" />
+		</copy>
+
+		<!-- Copy application icon to APP -->
+		<copy file="resources/application.icns" todir="${dir.release}/osx/${project.name}.app/Contents/Resources/" />
+
+		<!-- Copy jar archives to APP -->
+		<copy todir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java" flatten="true">
+			<fileset dir="${dir.build}" includes="**/*.jar" />
+		</copy>
+
+		<!-- Copy data folder to APP -->
+		<copy todir="${dir.release}/osx/${project.name}.app/Contents/Resources/Java/data" flatten="false">
+			<fileset dir="${dir.data}" includes="**/*.*" />
+		</copy>
+
+		<!-- dmg -->
+		<condition property="flg.osx.dmg">
+			<matches string="${osx.dmgcopy}" pattern="true" casesensitive="false" />
+		</condition>
+		<antcall target="osx.dmg" />
+
+		<!-- Remove temp folder -->
+		<delete dir="${dir.tmp}" />
+
+	</target>
+
+	<target name="osx.dmg" if="flg.osx.dmg">
+
+		<!-- Package working application -->
+		<mkdir dir="${dir.tmp}/image/${project.name}.app" />
+		<copy todir="${dir.tmp}/image/${project.name}.app">
+			<fileset dir="${dir.release}/osx/${project.name}.app">
+				<exclude name="**/JavaApplicationStub" />
+			</fileset>
+		</copy>
+
+		<!-- Copy exec JavaApplicationStub without turning it into a txt -->
+		<exec executable="cp">
+			<arg value="-rp" />
+			<arg value="${dir.release}/osx/${project.name}.app/Contents/MacOS/JavaApplicationStub" />
+			<arg value="${dir.tmp}/image/${project.name}.app/Contents/MacOS" />
+		</exec>
+
+		<!-- Create disk image -->
+		<exec executable="/usr/bin/hdiutil" os="Mac OS X">
+			<arg line="create -srcfolder ${dir.tmp}/image -volname '${project.name}' ${dir.tmp}/image/image.dmg" />
+		</exec>
+		<move file="${dir.tmp}/image/image.dmg" tofile="${dir.release}/osx/${project.name}.dmg" />
+
+		<delete dir="${dir.tmp}/image" />
+		
+	</target>
+
+	<target name="3. deploy WIN" depends="jar, win native libs">
+
+		<!-- Copy JAR to release -->
+		<copy todir="release/win/lib" flatten="true">
+			<fileset dir="${dir.build}" includes="**/*.*" />
+		</copy>
+		<copy todir="release/win/data">
+			<fileset dir="${dir.data}" includes="**/*.*" />
+		</copy>
+		
+		<!-- Create library path -->
+		<pathconvert property="class.pathApp" pathsep="&lt;/cp&gt;&lt;cp&gt;./lib/">
+			<fileset dir="${dir.build}" includes="**/*.jar" />
+			<flattenmapper />
+		</pathconvert>		
+
+		<!-- Create launch4jconfig.xml file -->
+		<copy file="resources/launch4jconfig.tpl.xml" tofile="resources/launch4jconfig.xml" overwrite="true" />
+		<replace file="resources/launch4jconfig.xml">
+			<replacefilter token="JARPATH" value="${basedir}/release/win/lib/${main.class}.jar" />
+			<replacefilter token="EXENAME" value="${main.class}" />
+			<replacefilter token="EXEPATH" value="${basedir}/release/win/${main.class}.exe" />
+			<replacefilter token="MAINCLASS" value="${main.package.name}${main.class}" />
+			<replacefilter token="LIBRAIRES" value="${class.pathApp}" />
+			<replacefilter token="PROJECT_AUTHOR" value="${project.author}" />
+			<replacefilter token="PROJECT_NAME" value="${project.name}" />
+			<replacefilter token="PROJECT_VERSION" value="${project.version}" />
+			<replacefilter token="PROJECT_FULLVERSION" value="${project.fullversion}" />
+			<replacefilter token="JVM_VERSION_MIN" value="${jvm.version.min}" />
+			<replacefilter token="JVM_VERSION_MAX" value="${jvm.version.max}" />
+			<replacefilter token="JVM_XMS" value="${jvm.xms}" />
+			<replacefilter token="JVM_XMX" value="${jvm.xmx}" />
+		</replace>
+		
+		<!-- Copy lauch config file to application (to avoid Cannot run program "./bin/windres" error)  -->
+		<copy file="resources/launch4jconfig.xml" todir="${launch4j.dir}" overwrite="true" />
+		<copy file="resources/icon.ico" todir="${launch4j.dir}" overwrite="true"  />
+		
+		<taskdef name="launch4j"
+		    classname="net.sf.launch4j.ant.Launch4jTask"
+		    classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+		
+		<launch4j configFile="${launch4j.dir}/launch4jconfig.xml" />
+
+		<!-- Delete Temp -->
+		<delete dir="${dir.tmp}" />
+		<delete file="${launch4j.dir}/resources/launch4jconfig.xml" />
+		<delete file="${launch4j.dir}/resources/icon.ico" />
+
+	</target>
+
+</project>

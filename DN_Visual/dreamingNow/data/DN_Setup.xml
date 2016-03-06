@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<dreamingNowSetup>
+	<listeningPort>8002</listeningPort>
+	<soundComputerIP>192.168.1.100</soundComputerIP>
+	<soundComputerPort>7000</soundComputerPort>
+	<cueInterfaceIP>192.168.1.100</cueInterfaceIP>
+	<cueInterfacePort>7010</cueInterfacePort>
+	<kinectWallIP>192.168.1.102</kinectWallIP>
+	<kinectWallPort>7011</kinectWallPort>
+	<outputScreenPositionX>2560</outputScreenPositionX>
+	<outputScreenPositionY>256</outputScreenPositionY>
+</dreamingNowSetup>
+
