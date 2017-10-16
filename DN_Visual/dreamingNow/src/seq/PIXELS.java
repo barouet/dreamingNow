@@ -243,7 +243,7 @@ public class PIXELS extends Sketch {
 		p.println("OCEAN");
 		bottomWorldBound = 6;
 		physics.setWorldBounds(new Rect(0, -4, p.width, p.height+bottomWorldBound)); //box definition
-		p.frameRate(30);
+		
 	}
 
 	public void kill() {
@@ -548,7 +548,7 @@ public class PIXELS extends Sketch {
 		int offset = 0;
 		if(p.seqStep == 0){
 			//le drag va s'estomper en Xsecondes
-			speeder = 2;
+			speeder = 1;
 			
 			if(timeLine < 103759 - offset){
 				if (change[10].test(kinect1Clicksub) && kinect1Clicksub == 1.0f){

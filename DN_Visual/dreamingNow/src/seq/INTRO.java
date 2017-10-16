@@ -71,7 +71,84 @@ public class INTRO extends Sketch{
 		//p.println(part);
 		//p.println(change[2].test(charIndex));
 
+		//Shows images version
+		/*
+		if(change[2].test(charIndex)){
+			if(charIndex == 0){
+				letterBlack = p.loadImage("pic/show/10.png");
+				letterWhite = p.loadImage("pic/show/10.png");
+			} else if(charIndex == 1){
+				letterBlack = p.loadImage("pic/show/13.png");
+				letterWhite = p.loadImage("pic/show/13.png");
+			}else if(charIndex == 2){
+				letterBlack = p.loadImage("pic/show/2.png");
+				letterWhite = p.loadImage("pic/show/2.png");
+			}else if(charIndex == 3){
+				letterBlack = p.loadImage("pic/show/5.png");
+				letterWhite = p.loadImage("pic/show/5.png");
+			}else if(charIndex == 4){
+				letterBlack = p.loadImage("pic/show/7.png");
+				letterWhite = p.loadImage("pic/show/7.png");
+			}else if(charIndex == 5){
+				letterBlack = p.loadImage("pic/show/3.png");
+				letterWhite = p.loadImage("pic/show/3.png");
+			}else if(charIndex == 6){
+				letterBlack = p.loadImage("pic/show/6.png");
+				letterWhite = p.loadImage("pic/show/6.png");
+			}else if(charIndex == 7){
+				letterBlack = p.loadImage("pic/show/11.png");
+				letterWhite = p.loadImage("pic/show/11.png");
+			}else if(charIndex == 8){
+				letterBlack = p.loadImage("pic/show/4.png");
+				letterWhite = p.loadImage("pic/show/4.png");
+			}else if(charIndex == 9){
+				letterBlack = p.loadImage("pic/show/9.png");
+				letterWhite = p.loadImage("pic/show/9.png");
+			}else if(charIndex == 10){
+				letterBlack = p.loadImage("pic/show/0.png");
+				letterWhite = p.loadImage("pic/show/0.png");
+			}
+		}
 		
+		*/
+		if(change[2].test(charIndex)){
+			if(charIndex == 0){
+				letterBlack = p.loadImage("pic/letters/cBlack.png");
+				letterWhite = p.loadImage("pic/letters/cBlack.png");
+			} else if(charIndex == 1){
+				letterBlack = p.loadImage("pic/letters/oBlack.png");
+				letterWhite = p.loadImage("pic/letters/oWhite.png");
+			}else if(charIndex == 2){
+				letterBlack = p.loadImage("pic/letters/mWhite.png");
+				letterWhite = p.loadImage("pic/letters/mBlack.png");
+			}else if(charIndex == 3){
+				letterBlack = p.loadImage("pic/letters/mBlack.png");
+				letterWhite = p.loadImage("pic/letters/mWhite.png");
+			}else if(charIndex == 4){
+				letterBlack = p.loadImage("pic/letters/eBlack.png");
+				letterWhite = p.loadImage("pic/letters/eWhite.png");
+			}else if(charIndex == 5){
+				letterBlack = p.loadImage("pic/letters/uBlack_2.png");
+				letterWhite = p.loadImage("pic/letters/uBlack_2.png");
+			}else if(charIndex == 6){
+				letterBlack = p.loadImage("pic/letters/nBlack.png");
+				letterWhite = p.loadImage("pic/letters/nWhite.png");
+			}else if(charIndex == 7){
+				letterBlack = p.loadImage("pic/letters/rBlack.png");
+				letterWhite = p.loadImage("pic/letters/rWhite.png");
+			}else if(charIndex == 8){
+				letterBlack = p.loadImage("pic/letters/eAccentBlack_2.png");
+				letterWhite = p.loadImage("pic/letters/eAccentBlack_2.png");
+			}else if(charIndex == 9){
+				letterBlack = p.loadImage("pic/letters/vBlack_2.png");
+				letterWhite = p.loadImage("pic/letters/vBlack_2.png");
+			}else if(charIndex == 10){
+				letterBlack = p.loadImage("pic/letters/eBlack.png");
+				letterWhite = p.loadImage("pic/letters/eWhite.png");
+			}
+		}
+		/*
+		// ENGLISH VERSION
 		if(change[2].test(charIndex)){
 			if(charIndex == 0){
 				letterBlack = p.loadImage("pic/letters/dBlack.png");
@@ -108,8 +185,9 @@ public class INTRO extends Sketch{
 				letterWhite = p.loadImage("pic/letters/wWhite.png");
 			}
 		}
-		
-		
+		//
+		 
+		 */
 		
 		int fadeIN = 255;
 
