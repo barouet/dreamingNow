@@ -7,7 +7,7 @@
 	<cueInterfacePort>7010</cueInterfacePort>
 	<kinectWallIP>192.168.1.102</kinectWallIP>
 	<kinectWallPort>7011</kinectWallPort>
-	<outputScreenPositionX>2560</outputScreenPositionX>
+	<outputScreenPositionX>0</outputScreenPositionX>
 	<outputScreenPositionY>256</outputScreenPositionY>
 </dreamingNowSetup>
 
